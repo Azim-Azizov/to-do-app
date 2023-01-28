@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-do <%= day %>
+    </title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-regular-rounded/css/uicons-regular-rounded.css'>
+</head>
+
+<body>
+    <div class="box" id="heading">
+        <h1>
+            <%= day %>
+        </h1>
+    </div>
+    <div class="box">
+        <form action="/delete" method="post">
+            <% for (let i=0; i < jobs.length; i++){ %>
+                <div class="item">
+                    <p>
+                        <%= jobs[i] %>
+                    </p>
+                    <button type="submit" name="id" value="<%= i %>"><i class="fi fi-rr-trash"></i></button>
+                </div>
+                <% } %>
+        </form>
+        <form class="item" action="/" method="post">
+            <div id="border">
+                <input type="text" name="job" placeholder="Enter your task">
+            </div>
+            <button type="submit" name="button"><i class="fi fi-rr-plus-small"></i></button>
+        </form>
+    </div>
+</body>
+
+</html>
