@@ -16,32 +16,39 @@ const options = {
   timeZone: "asia/baku",
 };
 
-const banned = [];
-
 const app = express();
 
 mongoose.set("strictQuery", false);
-mongoose.connect(DB_URI, {useNewUrlParser: true});
+mongoose.connect(DB_URI, { useNewUrlParser: true });
 
 const jobSchema = new mongoose.Schema({
   job: String
 });
 
+const banSchema = new mongoose.Schema({
+  ip: String,
+  time: Date
+});
+
 const Job = mongoose.model("Job", jobSchema);
 
+const Ban = mongoose.model("Ban", banSchema);
+
 function isBanned(req, res, next) {
-  const found = banned.find(obj => obj.ip == req.ip);
-  if (typeof found !== 'undefined') {
-    const diff = Math.ceil(60 - (new Date().getTime() - found.date.getTime()) / 1000);
-    if (diff < 0) {
-      banned.splice(banned.indexOf(found), 1);
-      res.send('<script>alert("You are unbanned. Now you can use the website!");window.location = "/"</script>');
+  Ban.findOne({ ip: req.headers["x-real-ip"] }, (err, ban) => {
+    if (ban) {
+      const diff = Math.ceil(60 - (new Date().getTime() - new Date(ban.time).getTime()) / 1000);
+      if (diff <= 0) {
+        Ban.deleteOne({ ip: req.headers["x-real-ip"] }).exec();
+        res.send('<script>alert("You are unbanned. Now you can use the website!");window.location = "/"</script>');
+      } else {
+        res.send(`<script>alert("You are banned. You have to wait ${diff} second(s) before accessing the website!");window.location = "/"</script>`);
+      }
+      return;
     } else {
-      res.send(`<script>alert("You are banned. You have to wait ${diff} second(s) before accessing the website!");window.location = "/"</script>`);
+      next();
     }
-    return;
-  }
-  next();
+  })
 }
 
 app.set("view engine", "ejs");
@@ -67,7 +74,8 @@ app.post("/", (req, res) => {
   } else if (req.body.job.length > 30) {
     res.send('<script>alert("No more than 30 chars!");window.location = "/"</script>')
   } else if (req.body.job.toLowerCase().includes("php")) {
-    banned.push({ "ip": req.ip, "date": new Date() });
+    const ban = new Ban({ ip: req.headers["x-real-ip"], time: new Date() });
+    ban.save();
     res.send('<script>alert("You are banned, because you used word php!");window.location = "/"</script>')
   } else {
     const job = new Job({
@@ -79,9 +87,7 @@ app.post("/", (req, res) => {
 })
 
 app.post("/delete", (req, res) => {
-  Job.deleteOne({_id: req.body.id}).then(() => {
-    console.log("Deleted");
-  });
+  Job.deleteOne({ _id: req.body.id }).exec();
   res.redirect("/");
 })
 
