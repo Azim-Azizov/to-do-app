@@ -19,14 +19,14 @@
     </div>
     <div class="box">
         <form action="/delete" method="post">
-            <% for (let i=0; i < jobs.length; i++){ %>
+            <% jobs.forEach(job => { %>
                 <div class="item">
                     <p>
-                        <%= jobs[i] %>
+                        <%= job.job %>
                     </p>
-                    <button type="submit" name="id" value="<%= i %>"><i class="fi fi-rr-trash"></i></button>
+                    <button type="submit" name="id" value="<%= job._id %>"><i class="fi fi-rr-trash"></i></button>
                 </div>
-                <% } %>
+                <% }); %>
         </form>
         <form class="item" action="/" method="post">
             <div id="border">
