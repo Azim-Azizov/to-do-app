@@ -1,6 +1,6 @@
 // jshint esversion:6
 
-const cron = require("node-cron");
+// const cron = require("node-cron");
 require("dotenv").config();
 
 const express = require("express");
@@ -91,8 +91,8 @@ app.post("/delete", (req, res) => {
   res.redirect("/");
 })
 
-cron.schedule("0 0 0 * * *", () => {
-  jobs = [];
-})
+// cron.schedule("0 0 0 * * *", () => {
+//   jobs = [];
+// })
 
 app.listen(3000)
