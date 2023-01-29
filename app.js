@@ -19,10 +19,15 @@ const options = {
 const app = express();
 
 mongoose.set("strictQuery", false);
-mongoose.connect(DB_URI, { useNewUrlParser: true });
+mongoose.connect(DB_URI);
 
 const jobSchema = new mongoose.Schema({
   job: String
+});
+
+const listSchema = new mongoose.Schema({
+  name: String,
+  list: [jobSchema]
 });
 
 const banSchema = new mongoose.Schema({
@@ -31,6 +36,8 @@ const banSchema = new mongoose.Schema({
 });
 
 const Job = mongoose.model("Job", jobSchema);
+
+const List = mongoose.model("List", listSchema);
 
 const Ban = mongoose.model("Ban", banSchema);
 
@@ -58,17 +65,45 @@ app.use(express.static(__dirname + "/static"))
 app.use(isBanned)
 
 app.get("/", (req, res) => {
+  res.redirect("/lists");
+})
+
+app.get("/lists", (req, res) => {
   let today = new Date().toLocaleDateString("en-US", options);
   Job.find((err, jobs) => {
     if (err) {
       console.log(err);
     } else {
-      res.render("index", { day: today, jobs: jobs });
+      List.find((err, lists) => {
+        res.render("index", { header: today, listName: "", lists: lists, jobs: jobs });
+      });
     }
   })
 })
 
-app.post("/", (req, res) => {
+app.get("/lists/:listName", (req, res) => {
+  List.findOne({ name: req.params.listName }, (err, list) => {
+    if (!list) {
+      list = new List({ name: req.params.listName, list: [] });
+      list.save();
+    }
+    List.find((err, lists) => {
+      res.render("index", { header: req.params.listName, listName: "/" + req.params.listName, lists: lists, jobs: list.list });
+    });
+  })
+})
+
+app.post("/lists/delete", (req, res) => {
+  Job.deleteOne({ _id: req.body.id }).exec();
+  res.redirect("/lists");
+})
+
+app.post("/lists/:listName/delete", (req, res) => {
+  List.updateOne({ name: req.params.listName }, {$pull: {list: {_id: req.body.id}}}).exec();
+  res.redirect(`/lists/${req.params.listName}`);
+})
+
+app.post("/lists", (req, res) => {
   if (req.body.job == "") {
     res.send('<script>alert("Enter some text!");window.location = "/"</script>')
   } else if (req.body.job.length > 30) {
@@ -86,9 +121,19 @@ app.post("/", (req, res) => {
   }
 })
 
-app.post("/delete", (req, res) => {
-  Job.deleteOne({ _id: req.body.id }).exec();
-  res.redirect("/");
+app.post("/lists/:listName", (req, res) => {
+  if (req.body.job == "") {
+    res.send(`<script>alert("Enter some text!");window.location = "/lists/${req.params.listName}"</script>`);
+  } else if (req.body.job.length > 30) {
+    res.send(`<script>alert("No more than 30 chars!");window.location = "/lists/${req.params.listName}"</script>`);
+  } else if (req.body.job.toLowerCase().includes("php")) {
+    const ban = new Ban({ ip: req.headers["x-real-ip"], time: new Date() });
+    ban.save();
+    res.send(`<script>alert("You are banned, because you used word php!");window.location = "/lists/${req.params.listName}"</script>`);
+  } else {
+    List.updateOne({name: req.params.listName}, {$push: {list: new Job({job: req.body.job})}}).exec();
+    res.redirect(`/lists/${req.params.listName}`);
+  }
 })
 
 // cron.schedule("0 0 0 * * *", () => {

@@ -5,36 +5,57 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>To-do <%= day %>
+    <title>To-do <%= header %>
     </title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/search.css">
     <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-regular-rounded/css/uicons-regular-rounded.css'>
 </head>
 
 <body>
     <div class="box" id="heading">
         <h1>
-            <%= day %>
+            <%= header %>
         </h1>
+        <form autocomplete="off" id="searchForm"" class="item" action="/lists"
+            onsubmit="location = '/lists/' + query.value; return false;">
+            <div id="border">
+                <div class="autocomplete">
+                    <input class="search-input" type="text" id="query" name="query" placeholder="Enter the list name">
+                </div>
+            </div>
+            <button class="search-button" type="submit" name="button"><i
+                    class="fi fi-rr-arrow-small-right"></i></button>
+        </form>
     </div>
     <div class="box">
-        <form action="/delete" method="post">
-            <% jobs.forEach(job => { %>
+        <form action="/lists<%= listName %>/delete" method="post">
+            <% jobs.forEach(job=> { %>
                 <div class="item">
                     <p>
                         <%= job.job %>
                     </p>
-                    <button type="submit" name="id" value="<%= job._id %>"><i class="fi fi-rr-trash"></i></button>
+                    <button class="item-button" type="submit" name="id" value="<%= job._id %>"><i
+                            class="fi fi-rr-trash"></i></button>
                 </div>
                 <% }); %>
         </form>
-        <form class="item" action="/" method="post">
+        <form class="item" action="/lists<%= listName %>" method="post">
             <div id="border">
-                <input type="text" name="job" placeholder="Enter your task">
+                <input class="item-input" type="text" name="job" placeholder="Enter your task">
             </div>
-            <button type="submit" name="button"><i class="fi fi-rr-plus-small"></i></button>
+            <button class="item-button" type="submit" name="button"><i class="fi fi-rr-plus-small"></i></button>
         </form>
     </div>
+    <script src="/search.js"></script>
+    <script>
+        const lists = [
+            <% lists.forEach(list => { %>
+            "<%= list.name %>",
+            <% }) %>
+        ];
+        autocomplete(document.getElementById("query"), lists);
+    </script>
 </body>
 
 </html>
