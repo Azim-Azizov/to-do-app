@@ -29,6 +29,8 @@ function autocomplete(inp, arr) {
         b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
         /*execute a function when someone clicks on the item value (DIV element):*/
         b.addEventListener("click", function (e) {
+          /*insert the value for the autocomplete text field:*/
+          inp.value = this.getElementsByTagName("input")[0].value;
           /*close the list of autocompleted values,
           (or any other open lists of autocompleted values:*/
           closeAllLists();
@@ -63,12 +65,14 @@ function autocomplete(inp, arr) {
     var x = document.getElementById(this.id + "autocomplete-list");
     if (x) x = x.getElementsByTagName("div");
     if (e.keyCode == 40) {
+      e.preventDefault();
       /*If the arrow DOWN key is pressed,
       increase the currentFocus variable:*/
       currentFocus++;
       /*and and make the current item more visible:*/
       addActive(x);
     } else if (e.keyCode == 38) { //up
+      e.preventDefault();
       /*If the arrow UP key is pressed,
       decrease the currentFocus variable:*/
       currentFocus--;
@@ -76,7 +80,7 @@ function autocomplete(inp, arr) {
       addActive(x);
     } else if (e.keyCode == 13) {
       /*If the ENTER key is pressed, prevent the form from being submitted,*/
-      e.preventDefault();
+      // e.preventDefault();
       if (currentFocus > -1) {
         /*and simulate a click on the "active" item:*/
         if (x) x[currentFocus].click();
@@ -86,7 +90,7 @@ function autocomplete(inp, arr) {
   function closeAllLists(elmnt) {
     /*close all autocomplete lists in the document,
     except the one passed as an argument:*/
-    inp.removeEventListener("keydown", eventControl);
+    // inp.removeEventListener("keydown", eventControl);
     var x = document.getElementsByClassName("autocomplete-items");
     for (var i = 0; i < x.length; i++) {
       if (elmnt != x[i] && elmnt != inp) {

@@ -7,8 +7,9 @@ html {
 }
 
 h1 {
+  margin:0;
   color: #fff;
-  padding: 10px;
+  padding: 20px 0px;
 }
 
 .box {
@@ -51,6 +52,10 @@ p {
   width: 313px;
   text-align: center;
   padding: 1px 2px;
+}
+
+button {
+  cursor: pointer;
 }
 
 button.search-button {
