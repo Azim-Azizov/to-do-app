@@ -29,23 +29,25 @@
         </form>
     </div>
     <div class="box main-box">
-        <form class="item" action="/lists<%= listName %>" method="post">
+        <form class="item" action="/lists<%= listName %>" method="post"> 
             <div id="border">
                 <input class="item-input" type="text" name="job" placeholder="Enter your task">
             </div>
             <button class="item-button" type="submit" name="button"><i class="fi fi-rr-plus-small"></i></button>
         </form>
-        <form action="/lists<%= listName %>/delete" method="post">
-            <% jobs.forEach(job=> { %>
+            <% jobs.forEach(job=> { %> 
                 <div class="item">
                     <p>
                         <%= job.job %>
-                    </p>
+                    </p> 
+                    <form action="/lists<%= listName %>/delete" method="post" class="item-button">
+
                     <button class="item-button" type="submit" name="id" value="<%= job._id %>"><i
                             class="fi fi-rr-trash"></i></button>
+                    </form>
                 </div>
                 <% }); %>
-        </form>
+
     </div>
     <script src="/search.js"></script>
     <script>

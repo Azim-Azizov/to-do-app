@@ -14,19 +14,24 @@ h1 {
 }
 
 .box {
-  max-width: 400px;
-  margin: 30px auto;
+
+  margin: 30px ;
   background: white;
   border-radius: 15px;
   box-shadow: 5px 5px 15px -5px rgba(0, 0, 0, 0.3);
+  width: 400px; 
+  margin-top: -10px;
 }
 
 .main-box {
   overflow-y: auto;
   max-height: 65vh;
   -ms-overflow-style: none;
-  scrollbar-width: none; 
-}
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  width: auto;
+} 
 
 .main-box::-webkit-scrollbar { 
   display: none;
@@ -38,12 +43,15 @@ h1 {
 }
 
 .item {
-  min-height: 70px;
   display: flex;
+  justify-content: space-between;
+  min-height: 70px;
+  
   align-items: center;
   border-bottom: 1px solid #F1F1F1;
   /* margin-left: 10px; */
   text-align: center;
+  gap: 20px;
 }
 
 .item:last-child {
@@ -56,14 +64,17 @@ input:checked+p {
 }
 
 p {
-  margin: 0;
+  
   font-size: 20px;
   font-weight: 200;
   color: #00204a;
   text-align: center;
-  width: 313px;
-  text-align: center;
   padding: 1px 2px;
+  width: 50%; 
+ 
+  display: flex;
+  flex-wrap: wrap;
+ 
 }
 
 button {
@@ -71,6 +82,7 @@ button {
 }
 
 button.search-button {
+  margin-right: 10px;
   min-height: 50px;
   width: 50px;
   border-radius: 50%;
@@ -81,8 +93,15 @@ button.search-button {
   padding-top: 8px;
   border-width: 0;
 }
-
+form.item-button{
+   
+  min-height: 50px;
+  width: 50px;
+  margin-right: 10px;
+}
 button.item-button {
+  
+  margin-right: 10px;
   min-height: 50px;
   width: 50px;
   border-radius: 50%;
@@ -145,4 +164,10 @@ input.item-input[type="text"]:focus {
 html, body {
   height: 100vh;
   overflow: hidden;
+}
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
