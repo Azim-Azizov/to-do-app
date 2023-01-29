@@ -28,7 +28,13 @@
                     class="fi fi-rr-arrow-small-right"></i></button>
         </form>
     </div>
-    <div class="box">
+    <div class="box main-box">
+        <form class="item" action="/lists<%= listName %>" method="post">
+            <div id="border">
+                <input class="item-input" type="text" name="job" placeholder="Enter your task">
+            </div>
+            <button class="item-button" type="submit" name="button"><i class="fi fi-rr-plus-small"></i></button>
+        </form>
         <form action="/lists<%= listName %>/delete" method="post">
             <% jobs.forEach(job=> { %>
                 <div class="item">
@@ -39,12 +45,6 @@
                             class="fi fi-rr-trash"></i></button>
                 </div>
                 <% }); %>
-        </form>
-        <form class="item" action="/lists<%= listName %>" method="post">
-            <div id="border">
-                <input class="item-input" type="text" name="job" placeholder="Enter your task">
-            </div>
-            <button class="item-button" type="submit" name="button"><i class="fi fi-rr-plus-small"></i></button>
         </form>
     </div>
     <script src="/search.js"></script>

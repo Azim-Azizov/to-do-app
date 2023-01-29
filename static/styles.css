@@ -1,9 +1,10 @@
 html {
   background-color: #E4E9FD;
   /* background-image: -webkit-linear-gradient(65deg, #0f8bde 50%, #E4E9FD 50%); */
-  background-image: radial-gradient(ellipse farthest-corner at 15% 50%, #316dc2 70%, #4e95d3 70%);
-  min-height: 1080px;
+  background-image: radial-gradient(ellipse farthest-corner at 15% 100%, #316dc2 70%, #4e95d3 70%);
+  /* min-height: 1080px; */
   font-family: 'helvetica neue';
+  background-repeat: no-repeat;
 }
 
 h1 {
@@ -14,10 +15,21 @@ h1 {
 
 .box {
   max-width: 400px;
-  margin: 50px auto;
+  margin: 30px auto;
   background: white;
   border-radius: 15px;
   box-shadow: 5px 5px 15px -5px rgba(0, 0, 0, 0.3);
+}
+
+.main-box {
+  overflow-y: auto;
+  max-height: 65vh;
+  -ms-overflow-style: none;
+  scrollbar-width: none; 
+}
+
+.main-box::-webkit-scrollbar { 
+  display: none;
 }
 
 #heading {
@@ -30,7 +42,7 @@ h1 {
   display: flex;
   align-items: center;
   border-bottom: 1px solid #F1F1F1;
-  margin-left: 10px;
+  /* margin-left: 10px; */
   text-align: center;
 }
 
@@ -128,4 +140,9 @@ input.item-input[type="text"]:focus {
 .item-input::placeholder {
   color: grey;
   opacity: 1;
+}
+
+html, body {
+  height: 100vh;
+  overflow: hidden;
 }

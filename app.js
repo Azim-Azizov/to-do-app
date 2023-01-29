@@ -26,7 +26,9 @@ const jobSchema = new mongoose.Schema({
 });
 
 const listSchema = new mongoose.Schema({
-  name: String,
+  name: {
+    type: String,
+  },
   list: [jobSchema]
 });
 
